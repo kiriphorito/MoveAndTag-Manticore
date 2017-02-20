@@ -34,7 +34,7 @@ def drawRobots(robots):
 plt.axes()
 
 
-fileName = '2.txt' #change here per question
+fileName = '5.txt' #change here per question
 checkState = 0
 robots = []
 polygons = []
@@ -58,13 +58,13 @@ with open(fileName,'r') as input: #reading txt file and drawing map
                 polygons.append(line)
 
 robotpoints = list(literal_eval(robots[0]))
-print "robot points = "
-print robotpoints
+#print "robot points = "
+#print robotpoints
 drawRobots(robotpoints)
 
 polygonpoints = list(literal_eval(polygons[0]))
-print "polypoints = "
-print polygonpoints
+#print "polypoints = "
+#print polygonpoints
 drawPolygons(polygonpoints)
 
 
@@ -72,16 +72,16 @@ drawPolygons(polygonpoints)
 polys = []
 for arraypoly in polygonpoints: #adding poygons to the vg
     temp = []
-    print "arraypoly"
-    print arraypoly
+#    print "arraypoly"
+#    print arraypoly
     for (x,y) in arraypoly:
-        print vg.Point(x,y)
+#        print vg.Point(x,y)
         temp.append(vg.Point(x,y))
-    print temp
+#    print temp
     polys.append(temp)
 
-print "polys"
-print polys
+#print "polys"
+#print polys
 
 g = vg.VisGraph()
 g.build(polys)
@@ -90,14 +90,14 @@ g.build(polys)
 paths = []
 
 for (x,y) in robotpoints: #finding shortest path between any two vertices
-    print "rist"
-    print vg.Point(x,y)
+#    print "rist"
+#    print vg.Point(x,y)
     for (a,b) in robotpoints:
-        print "second"
-        print (a,b)
+#        print "second"
+#        print (a,b)
         shortest = g.shortest_path(vg.Point(x,y), vg.Point(a,b))
-        print "shortest"
-        print shortest
+#        print "shortest"
+#        print shortest
         paths.append(shortest)
 
 
@@ -107,13 +107,12 @@ for path in paths: #drawing the visibility graph
     print path
     temppath = []
     for coord in path:
-        print "coord"
+#        print "coord"
         coord.__str__
-        print coord
+#        print coord
         temppath.append(make_tuple(coord.__str__()))
-#    linepoints = path.replace('Point','')
-    print "temppath"
-    print temppath
+#    print "temppath"
+#    print temppath
     drawLine(temppath)
 
 
