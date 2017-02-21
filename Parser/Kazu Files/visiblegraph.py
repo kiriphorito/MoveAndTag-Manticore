@@ -34,7 +34,7 @@ def drawRobots(robots):
 plt.axes()
 
 
-fileName = '5.txt' #change here per question
+fileName = '10.txt' #change here per question
 checkState = 0
 robots = []
 polygons = []
