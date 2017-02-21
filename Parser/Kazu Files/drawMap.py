@@ -51,7 +51,7 @@ plt.axes()
 
 samLines([[(-1.0, -1.0), (0.0, 6.0), (1.0, 6.0), (2.0, 2.0), (4.0, 2.0), (4.0, 3.0), (4.0, 4.0)]])
 
-fileName = '1.txt' #change here per question
+fileName = '2.txt' #change here per question
 checkState = 0
 robots = []
 polygons = []
