@@ -28,16 +28,33 @@ def drawRobots(robots):
     for (x,y) in robots:
         plt.plot(x,y,".")
 
+def samLines(coords):
+    for lines in coords:
+        print lines
+        prex = "f"
+        prey = "f"
+        for (x,y) in lines:
+            print (x,y)
+            if prex == "f":
+                prex = x
+                prey = y
+                continue
+            line = plt.Polygon([(prex,prey),(x,y)], closed=None, fill=None)
+            plt.gca().add_patch(line)
+
 
 plt.axes()
 
 drawLine([(0.0, 1.0), (2.0, 0.0), (2.0, 0.0), (3.0, 2.0), (3.0, 4.0), (3.0, 5.0), (3.0, 5.0), (6.0, 2.0), (6.0, 2.0), (8.0, 1.0), (9.0, 0.0)])
 
-fileName = '2.txt'
+samLines([[(0.0, 0.0), (10.0, 10.0), (9.0, 9.0)],[(10.0, 10.0), (8.0, 10.0), (5.0, 0.0)],[(8.0, 10.0), (0.0, 7.0)], [(9.0, 9.0), (1.0, 8.0)]])
+
+
+fileName = '2.txt' #change here per question
 checkState = 0
 robots = []
 polygons = []
-with open(fileName,'r') as input:
+with open(fileName,'r') as input: #reading txt file and drawing map
     for line in input:
         if 'Robots' in line:
             checkState = 1
