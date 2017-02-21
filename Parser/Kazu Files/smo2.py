@@ -33,6 +33,10 @@ def drawPolygons(polygons):
     except ValueError:
         print ("no polygons specified")
 
+def drawPolygonNoFill(points,color):
+    polygon = plt.Polygon(points,color=color,fill=False)
+    plt.gca().add_patch(polygon)
+
 def drawPolygonsNoFill(polygons):
     try:
         for xs in polygons:
@@ -215,6 +219,7 @@ def rrtpath(obstacles,startcoord,goalcoord,randAreas):
     smoothiePath = supersmoothie(path,obstacles)
     plt.plot([x for (x,y) in smoothiePath], [y for (x,y) in smoothiePath],'-y')
     print smoothiePath
+    return smoothiePath
 
 obstacleList = [[(1,2),(1,4),(3,4),(3,2)],[(8,1),(4,1),(4,4),(5,2)]]
 start = (0,0)
@@ -223,23 +228,6 @@ rand = (-2,15)
 
 rrtpath(obstacleList,start,goal,rand) # rrt  returns smoothie path
 drawPolygonsNoFill(obstacleList) # draw map
-
-
-#rrt=RRT(start=[0,0],goal=[5,10],randArea=[-2,15],obstacleList=obstacleList)
-#path=rrt.Planning(animation=True)
-
-    # Draw final path
-#rrt.DrawGraph()
-#plt.plot([x for (x,y) in path], [y for (x,y) in path],'-r')
-#print path
-#print
-#    
-#    
-#smoothiePath = supersmoothie(path,obstacleList)
-#plt.plot([x for (x,y) in smoothiePath], [y for (x,y) in smoothiePath],'-y')
-#print smoothiePath
-
-
 
 plt.axis('scaled')
 plt.grid(True)
