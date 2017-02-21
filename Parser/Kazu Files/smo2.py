@@ -18,6 +18,10 @@ import random
 import math
 import copy
 
+def drawPolygonNoFill(points,color):
+    polygon = plt.Polygon(points,color=color,fill=False)
+    plt.gca().add_patch(polygon)
+
 def drawPolygon(points):
     polygon = plt.Polygon(points)
     plt.gca().add_patch(polygon)
@@ -26,6 +30,13 @@ def drawPolygons(polygons):
     try:
         for xs in polygons:
             drawPolygon(xs)
+    except ValueError:
+        print ("no polygons specified")
+
+def drawPolygonsNoFill(polygons):
+    try:
+        for xs in polygons:
+            drawPolygonNoFill(xs,'red')
     except ValueError:
         print ("no polygons specified")
 
@@ -211,7 +222,7 @@ goal = (5,10)
 rand = (-2,15)
 
 rrtpath(obstacleList,start,goal,rand) # rrt  returns smoothie path
-drawPolygons(obstacleList) # draw map
+drawPolygonsNoFill(obstacleList) # draw map
 
 
 #rrt=RRT(start=[0,0],goal=[5,10],randArea=[-2,15],obstacleList=obstacleList)
