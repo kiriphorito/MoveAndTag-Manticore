@@ -20,7 +20,7 @@ plt.axes()
 #        prex = x
 #        prey = y
 
-coords = [[(0.0, 0.0), (10.0, 10.0), (9.0, 9.0)],[(10.0, 10.0), (8.0, 10.0), (5.0, 0.0)],[(8.0, 10.0), (0.0, 7.0)], [(9.0, 9.0), (1.0, 8.0)]]
+coords = [[(-1.0, -1.0), (0.0, 6.0), (1.0, 6.0), (2.0, 2.0), (4.0, 2.0), (4.0, 3.0), (4.0, 4.0)]]
 
 #coords = [[(0.0, 1.0), (2.0, 0.0), (3.0, 2.0)],[(3.0, 4.0), (3.0, 5.0),(6.0, 2.0), (8.0, 1.0), (9.0, 0.0)]]
 
@@ -33,9 +33,12 @@ for lines in coords:
         if prex == "f":
             prex = x
             prey = y
-            continue
-        line = plt.Polygon([(prex,prey),(x,y)], closed=None, fill=None)
-        plt.gca().add_patch(line)
+        else:
+            line = plt.Polygon([(prex,prey),(x,y)], closed=None, fill=None)
+            plt.gca().add_patch(line)
+            prex = x
+            prey = y
+            print("connecting",(x,y),"to",(prex,prey))
 #plt.plot((0,1),(1,2))
 
 

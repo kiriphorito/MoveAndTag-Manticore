@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # coding: UTF-8
+import pyvisgraph as vg
 import matplotlib.pyplot as plt
 from ast import literal_eval
+from ast import literal_eval as make_tuple
 
 
 def drawPolygon(points):
@@ -20,38 +22,19 @@ def drawLine(points):
     line = plt.Polygon(points, closed=None, fill=None, edgecolor='r')
     plt.gca().add_patch(line)
 
-#def drawLines(lines):
-#    for xs in lines:
-#        drawLine(xs)
+def drawLines(lines):
+    for xs in lines:
+        drawLine(xs)
 
 def drawRobots(robots):
     for (x,y) in robots:
         plt.plot(x,y,".")
 
-def samLines(coords):
-    for lines in coords:
-        print lines
-        prex = "f"
-        prey = "f"
-        for (x,y) in lines:
-            print (x,y)
-            if prex == "f":
-                prex = x
-                prey = y
-            else:
-                line = plt.Polygon([(prex,prey),(x,y)], closed=None, fill=None)
-                plt.gca().add_patch(line)
-                prex = x
-                prey = y
-                print("connecting",(x,y),"to",(prex,prey))
-#plt.plot((0,1),(1,2))
-
 
 plt.axes()
 
-samLines([[(-1.0, -1.0), (0.0, 6.0), (1.0, 6.0), (2.0, 2.0), (4.0, 2.0), (4.0, 3.0), (4.0, 4.0)]])
 
-fileName = '1.txt' #change here per question
+fileName = '3.txt' #change here per question
 checkState = 0
 robots = []
 polygons = []
@@ -75,12 +58,49 @@ with open(fileName,'r') as input: #reading txt file and drawing map
                 polygons.append(line)
 
 robotpoints = list(literal_eval(robots[0]))
-print robotpoints
 drawRobots(robotpoints)
 
 polygonpoints = list(literal_eval(polygons[0]))
-print polygonpoints
 drawPolygons(polygonpoints)
+
+
+
+polys = []
+for arraypoly in polygonpoints: #adding poygons to the vg
+    temp = []
+    for (x,y) in arraypoly:
+        temp.append(vg.Point(x,y))
+    polys.append(temp)
+
+g = vg.VisGraph()
+g.build(polys)
+
+
+paths = []
+
+for (x,y) in robotpoints: #finding shortest path between any two vertices
+    for (a,b) in robotpoints:
+        shortest = g.shortest_path(vg.Point(x,y), vg.Point(a,b))
+        paths.append(shortest)
+
+
+print paths
+
+for path in paths: #drawing the visibility graph
+    print path
+    temppath = []
+    for coord in path:
+        coord.__str__
+        temppath.append(make_tuple(coord.__str__()))
+    drawLine(temppath)
+
+
+
+
+
 
 plt.axis('scaled')
 plt.show()
+
+
+
