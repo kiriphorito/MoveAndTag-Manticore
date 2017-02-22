@@ -104,25 +104,19 @@ class RRT():
             self.nodeList.append(newNode)
 
             # check goal
-            
-            robots = [(2,9),(4,4),(7,5)]
-            
-            for (goalx,goaly) in robots:
-                print ("checking",goalx,goaly)
-                dx = newNode.x - goalx
-                dy = newNode.y - goaly
-                d = math.sqrt(dx * dx + dy * dy)
-                if d <= self.expandDis:
-                    if not self.__CollisionCheck(newNode, obstacleList,Node(goalx,goaly)):
-                        continue
-                    else:
-                        #print("Goal!!")
-                        print (goalx,goaly)
-                        path = [[goalx,goaly]]
-                        return
-                if animation:
-                    self.DrawGraph(rnd)
-    
+            dx = newNode.x - self.end.x
+            dy = newNode.y - self.end.y
+            d = math.sqrt(dx * dx + dy * dy)
+            if d <= self.expandDis:
+                if not self.__CollisionCheck(newNode, obstacleList,self.end):
+                    continue
+                else:
+                
+                #print("Goal!!")
+                    break
+
+            if animation:
+                self.DrawGraph(rnd)
 
             
         path=[[self.end.x,self.end.y]]
@@ -240,7 +234,7 @@ goal = (7,5)
 rand = (-1,12)
 rrtpath(obstacleList,start,goal,rand)
 
-#rrtpath(obstacleList,robots,start,rand) #return closest node
+#rrtpath(obstacleList,robots,start,rand) #return closest node 
 
 
 drawRobots(robots)
