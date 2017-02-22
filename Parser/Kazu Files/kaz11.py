@@ -10,7 +10,7 @@ u"""
 """
 
 import shapely
-from shapely.geometry import Polygon, LineString, Point, MultiPoint
+from shapely.geometry import Polygon, LineString, Point, MultiPoint, GeometryCollection
 import matplotlib.pyplot as plt
 from ast import literal_eval
 
@@ -114,8 +114,12 @@ class RRT():
             dy = newNode.y - self.end.y
             d = math.sqrt(dx * dx + dy * dy)
             if d <= self.expandDis:
+                if not self.__CollisionCheck(newNode, obstacleList,self.end):
+                    continue
+                else:
+                
                 #print("Goal!!")
-                break
+                    break
 
             if animation:
                 self.DrawGraph(rnd)
@@ -167,7 +171,7 @@ class RRT():
 
 def LineCollisionCheck(first,second, obstacleList):
     from shapely import geometry,wkt
-    EPS = 1.2e-16
+    EPS = 1e-15
     x1 = first[0]
     y1 = first[1]
     x2 = second[0]
@@ -181,32 +185,34 @@ def LineCollisionCheck(first,second, obstacleList):
 #            return False
 ##    print "safe"
 #    return True
-
     line = geometry.LineString([(x1,y1),(x2,y2)])
+#    if line.is_valid == False:
+#        print "not line"
+#        return False
     for p1 in obstacleList:
+        
 #        print line
         poly = geometry.Polygon(p1)
-        ips = line.buffer(EPS).intersection(poly.boundary)
+#        if poly.is_valid == False:
+#            print "not valid"
+#            return False
+        ips = line.intersection(poly.boundary)
 #        print ips
         if type(ips) is Point:
-            return False
 #            print "hello"
             if ips.distance(poly) < EPS:
 #                print "INTERSECT"
                 return False
-        if type(ips) is MultiPoint:
-            return False
+        elif type(ips) is MultiPoint:
             for i in ips:
                 if (i.distance(poly) <EPS):
 #                    print "INTERSECT2"
                     return False
-#        if(ips != "GEOMETRYCOLLECTION EMPTY"):
-#            print ("ips",ips)
-#            print "Not empty"
-##            for i in ips:
-#            if ips.distance(poly) < EPS: #intersects
-#                print ("distance",ips.distance(poly))
-#                return False
+        elif type(ips) is GeometryCollection:
+            continue
+        else:
+            print (ips,type(ips))
+            return False
     return True
 
 def supersmoothie(smoothie,obstacleList):
