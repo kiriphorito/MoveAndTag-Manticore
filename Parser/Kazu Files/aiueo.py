@@ -130,7 +130,8 @@ class RRT():
 
         animation: flag for animation on or off
         """
-
+        robots = [(2,9),(7,5)]
+        
         self.nodeList = [self.start]
         while True:
             # Random Sampling
@@ -151,29 +152,32 @@ class RRT():
             newNode.x += self.expandDis * math.cos(theta)
             newNode.y += self.expandDis * math.sin(theta)
             newNode.parent = nind
+            path = []
 
             if not self.__CollisionCheck(newNode, obstacleList,nearestNode):
                 continue
 
             self.nodeList.append(newNode)
-
-            # check goal
-            dx = newNode.x - self.end.x
-            dy = newNode.y - self.end.y
-            d = math.sqrt(dx * dx + dy * dy)
-            if d <= self.expandDis:
-                if not self.__CollisionCheck(newNode, obstacleList,self.end):
-                    continue
-                else:
-                
-                #print("Goal!!")
-                    break
-
-            if animation:
-                self.DrawGraph(rnd)
-
+            check = False
+            for (gx,gy) in robots:
+                # check goal
+                dx = newNode.x - gx
+                dy = newNode.y - gy
+                d = math.sqrt(dx * dx + dy * dy)
+                if d <= self.expandDis:
+                    if not self.__CollisionCheck(newNode, obstacleList,Node(gx,gy)): #if intersects
+                        continue
+                    else:
+                        print "ok"
+                        print (gx,gy)
+                        path += [[gx,gy]]
+                        check = True
+                        #print("Goal!!")
+                        break
             
-        path=[[self.end.x,self.end.y]]
+            if check:
+                break
+#        path=[[self.end.x,self.end.y]]
         lastIndex = len(self.nodeList) - 1
         while self.nodeList[lastIndex].parent is not None:
             node = self.nodeList[lastIndex]
@@ -199,8 +203,9 @@ class RRT():
 
 
 
-#=====end of RRT class
 
+
+#=====end of RRT class
 
 def rrtpath(obstacles,startcoord,goalcoord,randAreas):
     rrt = RRT(start=startcoord, goal=goalcoord,randArea = randAreas, obstacleList=obstacles)
