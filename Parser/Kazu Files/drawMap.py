@@ -64,7 +64,7 @@ plt.axes()
 
 
 
-fileName = '30.txt' #change here per question
+fileName = 'rrt.txt' #change here per question
 checkState = 0
 robots = []
 polygons = []
