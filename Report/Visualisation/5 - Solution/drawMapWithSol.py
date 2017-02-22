@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 from ast import literal_eval
 import sys
+import ast
 
 
 def drawPolygon(points):
@@ -62,7 +63,20 @@ def samLines(coords):
 
 plt.axes()
 
-samLines([])
+solutionFileName = 'smo2sol-' + sys.argv[1] + '.txt'
+with open(solutionFileName,'r') as input:
+    for line in input:
+        if 'Time Taken:' in line:
+            continue
+        solution = line
+
+solution = solution.replace(";","],[")
+solution = "[" + solution + "]"
+print solution
+
+solution = ast.literal_eval(solution)
+
+samLines(solution)
 
 fileName = sys.argv[1] + '.txt' #change here per question
 checkState = 0
