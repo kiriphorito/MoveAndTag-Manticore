@@ -71,7 +71,7 @@ with open(solutionFileName,'r') as input:
         solution = line
 
 solution = solution.replace(";","],[")
-solution = "[" + solution + "]"
+solution = "[[" + solution + "]]"
 print solution
 
 solution = ast.literal_eval(solution)
