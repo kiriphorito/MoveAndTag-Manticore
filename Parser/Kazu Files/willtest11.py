@@ -14,6 +14,7 @@ from shapely.geometry import Polygon, LineString, Point
 from shapely import geometry,wkt
 import matplotlib.pyplot as plt
 from ast import literal_eval
+#from numpy import ensure_numeric
 
 import random
 import math
@@ -177,16 +178,14 @@ class RRT():
 
     # def __CollisionCheck(self, node,obstacleList,nearestNode):
     def __CollisionCheck(self, node,obstacleList,nearestNode):
-        line1 = geometry.LineString([(nearestNode.x,nearestNode.y),(node.x,node.y)])
-        for p in obstacleList:
-            poly = geometry.Polygon(p)
-            ips = line1.intersection(poly.boundary)
-            # print ips
-            EPS = 1e-15
-            for i in ips:
-                if ips.distance(poly) < EPS:
-                    return False
-        return True
+        x1 = nearestNode.x
+        y1 = nearestNode.y
+        x2 = node.x
+        y2 = node.y
+        first = [x1,y1]
+        second = [x2,y2]
+        return LineCollisionCheck(first,second,obstacleList)
+
         # line1 = ((nearestNode.x,nearestNode.y),(node.x,node.y))
         # for poly in obstacleList:
         #     for i in xrange(0, len(poly) - 1, 1):
@@ -266,8 +265,8 @@ def LineCollisionCheck(first,second, obstacleList):
     for poly in obstacleList:
         for i in xrange(0, len(poly) - 1, 1):
             line1 = ((poly[i][0],poly[i][1]),(poly[i+1][0],poly[i+1][1]))
-            line0 = ensure_numeric(line0, numpy.float)
-            line1 = ensure_numeric(line1, numpy.float)
+#            line0 = ensure_numeric(line0, numpy.float)
+#            line1 = ensure_numeric(line1, numpy.float)
 
             x0, y0 = line0[0, :]
             x1, y1 = line0[1, :]
@@ -279,7 +278,7 @@ def LineCollisionCheck(first,second, obstacleList):
             u0 = (x3 - x2) * (y0 - y2) - (y3 - y2) * (x0 - x2)
             u1 = (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0)
 
-            if numpy.allclose(denom, 0.0, rtol=rtol, atol=atol):
+            if numpy.allclose(denom, 0.0, rtol=rtol, atol=atol) != True:
                 # Lines are parallel - check if they are collinear
                 # if numpy.allclose([u0, u1], 0.0, rtol=rtol, atol=atol):
                 #     # We now know that the lines are collinear
@@ -292,8 +291,8 @@ def LineCollisionCheck(first,second, obstacleList):
                 #                                [x2, y2], [x3, y3])
                 # else:
                 #     # Lines are parallel but aren't collinear
-                #     return 4
-            else:
+#                     return 4
+#            else:
                 # Lines are not parallel, check if they intersect
                 u0 = u0 / denom
                 u1 = u1 / denom
@@ -311,7 +310,7 @@ def LineCollisionCheck(first,second, obstacleList):
                 if 0.0 <= u0 <= 1.0 and 0.0 <= u1 <= 1.0:
                     # We have intersection
                     return False
-=
+
             # boolean = True
     return True
 
