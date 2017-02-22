@@ -1,22 +1,43 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 u"""
-@brief: Path Planning Sample Code with Randamized Rapidly-Exploring Random Trees (RRT) 
+@brief: Path Planning Sample Code with Randamized Rapidly-Exploring Random Trees (RRT)
 
 @author: AtsushiSakai
 
 @license: MIT
 
 """
-
+from __future__ import division
 import shapely
 from shapely.geometry import Polygon, LineString, Point
+from shapely import geometry,wkt
 import matplotlib.pyplot as plt
 from ast import literal_eval
+#from numpy import ensure_numeric
 
 import random
 import math
 import copy
+
+
+
+def line(p1, p2):
+    A = (p1[1] - p2[1])
+    B = (p2[0] - p1[0])
+    C = (p1[0]*p2[1] - p2[0]*p1[1])
+    return A, B, -C
+
+def intersection(L1, L2):
+    D  = L1[0] * L2[1] - L1[1] * L2[0]
+    Dx = L1[2] * L2[1] - L1[1] * L2[2]
+    Dy = L1[0] * L2[2] - L1[2] * L2[0]
+    if D != 0:
+        x = Dx / D
+        y = Dy / D
+        return x,y
+    else:
+        return False
 
 
 
@@ -57,7 +78,7 @@ class RRT():
     u"""
     Class for RRT Planning
     """
-    
+
     def __init__(self, start, goal, obstacleList,randArea,expandDis=1.0,goalSampleRate=5,maxIter=500):
         u"""
         Setting Parameter
@@ -75,10 +96,10 @@ class RRT():
         self.expandDis = expandDis
         self.goalSampleRate = goalSampleRate
         self.maxIter = maxIter
-    
+
     def Planning(self,animation=True):
         u"""
-        Pathplanning 
+        Pathplanning
 
         animation: flag for animation on or off
         """
@@ -120,7 +141,7 @@ class RRT():
             if animation:
                 self.DrawGraph(rnd)
 
-            
+
         path=[[self.end.x,self.end.y]]
         lastIndex = len(self.nodeList) - 1
         while self.nodeList[lastIndex].parent is not None:
@@ -155,21 +176,82 @@ class RRT():
         minind = dlist.index(min(dlist))
         return minind
 
+    # def __CollisionCheck(self, node,obstacleList,nearestNode):
     def __CollisionCheck(self, node,obstacleList,nearestNode):
-        p2 = LineString([(nearestNode.x,nearestNode.y),(node.x,node.y)])
-        for poly in obstacleList:
-            p1 = Polygon(poly)
-            if p1.intersects(p2):
-#                print "collision"
-                return False
-#        print "safe"
-        return True
+        x1 = nearestNode.x
+        y1 = nearestNode.y
+        x2 = node.x
+        y2 = node.y
+        first = [x1,y1]
+        second = [x2,y2]
+        return LineCollisionCheck(first,second,obstacleList)
+
+        # line1 = ((nearestNode.x,nearestNode.y),(node.x,node.y))
+        # for poly in obstacleList:
+        #     for i in xrange(0, len(poly) - 1, 1):
+        #         line2 = ((poly[i][0],poly[i][1]),(poly[i+1][0],poly[i+1][1]))
+        #         xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+        #         ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1]) #Typo was here
+        #
+        #         def det(a, b):
+        #             return a[0] * b[1] - a[1] * b[0]
+        #
+        #         div = det(xdiff, ydiff)
+        #         if div == 0:
+        #            return False
+        #
+        #         d = (det(*line1), det(*line2))
+        #         x = det(d, xdiff) / div
+        #         y = det(d, ydiff) / div
+        #         # boolean = True
+        # return True
+        # line1 = line([nearestNode.x,nearestNode.y],[node.x,node.y])
+        # for poly in obstacleList:
+        #     for i in xrange(0, len(poly) - 1, 1):
+        #         line2 = line([poly[i][0],poly[i][1]],[poly[i+1][0],poly[i+1][1]])
+        #                 # xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+        #                 # ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1]) #Typo was here
+        #                 #
+        #                 # def det(a, b):
+        #                 #     return a[0] * b[1] - a[1] * b[0]
+        #                 #
+        #                 # div = det(xdiff, ydiff)
+        #                 # if div == 0:
+        #                 #    return False
+        #                 #
+        #                 # d = (det(*line1), det(*line2))
+        #                 # x = det(d, xdiff) / div
+        #                 # y = det(d, ydiff) / div
+        #
+        #         R = intersection(line1, line1)
+        #         if R:
+        #             print "Intersection detected:", R
+        #             return False
+        #         else:
+        #             print "No single intersection point detected"
+        #                 # boolean = True
+        # return True
+        # p2 = LineString([(nearestNode.x,nearestNode.y),(node.x,node.y)])
+#         for poly in obstacleList:
+#             p1 = Polygon(poly)
+#             # pr = p2.interpolate(p2.project(p1))
+#             if p2.distance(p1) == 0.0:
+# #                print "collision"
+#                 return True
+# #        print "safe"
+#         return False
+    # def line_intersection(line1, line2):
+
+
+# print line_intersection((A, B), (C, D))
 
 def LineCollisionCheck(first,second, obstacleList):
     x1 = first[0]
     y1 = first[1]
     x2 = second[0]
     y2 = second[1]
+    rtol=1.0e-12
+    atol=1.0e-12
 
     try:
         a=y2-y1
@@ -178,14 +260,124 @@ def LineCollisionCheck(first,second, obstacleList):
     except ZeroDivisionError:
         return False
 
-    p2 = LineString([(x1,y1),(x2,y2)])
+
+    line0 = ((x1,y1),(x2,y2))
     for poly in obstacleList:
-        p1 = Polygon(poly)
-        if p1.intersects(p2):
-#            print "collision"
-            return False
-#    print "safe"
+        for i in xrange(0, len(poly) - 1, 1):
+            line1 = ((poly[i][0],poly[i][1]),(poly[i+1][0],poly[i+1][1]))
+#            line0 = ensure_numeric(line0, numpy.float)
+#            line1 = ensure_numeric(line1, numpy.float)
+
+            x0, y0 = line0[0, :]
+            x1, y1 = line0[1, :]
+
+            x2, y2 = line1[0, :]
+            x3, y3 = line1[1, :]
+
+            denom = (y3 - y2) * (x1 - x0) - (x3 - x2) * (y1 - y0)
+            u0 = (x3 - x2) * (y0 - y2) - (y3 - y2) * (x0 - x2)
+            u1 = (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0)
+
+            if numpy.allclose(denom, 0.0, rtol=rtol, atol=atol) != True:
+                # Lines are parallel - check if they are collinear
+                # if numpy.allclose([u0, u1], 0.0, rtol=rtol, atol=atol):
+                #     # We now know that the lines are collinear
+                #     state = (point_on_line([x0, y0], line1, rtol=rtol, atol=atol),
+                #              point_on_line([x1, y1], line1, rtol=rtol, atol=atol),
+                #              point_on_line([x2, y2], line0, rtol=rtol, atol=atol),
+                #              point_on_line([x3, y3], line0, rtol=rtol, atol=atol))
+                #
+                #     return collinearmap[state]([x0, y0], [x1, y1],
+                #                                [x2, y2], [x3, y3])
+                # else:
+                #     # Lines are parallel but aren't collinear
+#                     return 4
+#            else:
+                # Lines are not parallel, check if they intersect
+                u0 = u0 / denom
+                u1 = u1 / denom
+
+                x = x0 + u0 * (x1 - x0)
+                y = y0 + u0 * (y1 - y0)
+
+                # Sanity check - can be removed to speed up if needed
+                if not numpy.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol):
+                    raise Exception
+                if not numpy.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol):
+                    raise Exception
+
+                # Check if point found lies within given line segments
+                if 0.0 <= u0 <= 1.0 and 0.0 <= u1 <= 1.0:
+                    # We have intersection
+                    return False
+
+            # boolean = True
     return True
+
+
+
+
+    # line1 = ((x1,y1),(x2,y2))
+    # for poly in obstacleList:
+    #     for i in xrange(0, len(poly) - 1, 1):
+    #         line2 = ((poly[i][0],poly[i][1]),(poly[i+1][0],poly[i+1][1]))
+    #         xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+    #         ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1]) #Typo was here
+    #
+    #         def det(a, b):
+    #             return a[0] * b[1] - a[1] * b[0]
+    #
+    #         div = det(xdiff, ydiff)
+    #         if div == 0:
+    #            return False
+    #
+    #         d = (det(*line1), det(*line2))
+    #         x = det(d, xdiff) / div
+    #         y = det(d, ydiff) / div
+    #         # boolean = True
+    # return True
+    # line1 = line([x1,y1],[x2,y2])
+    # for poly in obstacleList:
+    #     for i in xrange(0, len(poly) - 1, 1):
+    #         line2 = line([poly[i][0],poly[i][1]],[poly[i+1][0],poly[i+1][1]])
+    #                 # xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+                    # ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1]) #Typo was here
+                    #
+                    # def det(a, b):
+                    #     return a[0] * b[1] - a[1] * b[0]
+                    #
+                    # div = det(xdiff, ydiff)
+                    # if div == 0:
+                    #    return False
+                    #
+                    # d = (det(*line1), det(*line2))
+                    # x = det(d, xdiff) / div
+                    # y = det(d, ydiff) / div
+
+    #         R = intersection(line1, line1)
+    #         if R:
+    #             print "Intersection detected:", R
+    #             return False
+    #         else:
+    #             print "No single intersection point detected"
+    #                 # boolean = True
+    # return True
+#     p2 = LineString([(x1,y1),(x2,y2)])
+#     for poly in obstacleList:
+#         p1 = Polygon(poly)
+#         # pr = p2.interpolate(p2.project(p1))
+#         if p2.distance(p1) == 0.0:
+# #                print "collision"
+#             return True
+# #        print "safe"
+#     return False
+#     for poly in obstacleList:
+#         p1 = Polygon(poly)
+#         if p1.intersects(p2):
+# #            print "collision"
+#             return False
+# #    print "safe"
+#     return True
 
 def supersmoothie(smoothie,obstacleList):
     path = smoothie

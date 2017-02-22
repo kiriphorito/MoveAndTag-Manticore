@@ -62,9 +62,7 @@ def samLines(coords):
 plt.axes()
 
 
-
-
-fileName = '30.txt' #change here per question
+fileName = '22.txt' #change here per question
 checkState = 0
 robots = []
 polygons = []

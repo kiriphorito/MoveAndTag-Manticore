@@ -1,0 +1,17 @@
+from osgeo import ogr
+
+def intersection():
+    line1 = "LINESTRING (1181866.263593049 615654.4222507705, 1205917.1207499576 623979.7189589312, 1227192.8790041457 643405.4112779726, 1224880.2965852122 665143.6860159477)",
+    line2 = "LINESTRING (1181866.263593049 615654.4222507705, 1205917.1207499576 623979.7189589312, 1227192.8790041457 643405.4112779726, 1224880.2965852122 665143.6860159477)",
+
+    poly1 = ogr.CreateGeometryFromWkt(wkt1)
+    poly2 = ogr.CreateGeometryFromWkt(wkt2)
+
+    intersection = poly1.Intersection(poly2)
+
+    print intersection.ExportToWkt()
+
+
+
+
+intersection()

@@ -10,7 +10,7 @@ u"""
 """
 
 import shapely
-from shapely.geometry import Polygon, LineString, Point
+from shapely.geometry import Polygon, LineString, Point, MultiPoint, GeometryCollection
 import matplotlib.pyplot as plt
 from ast import literal_eval
 
@@ -114,8 +114,12 @@ class RRT():
             dy = newNode.y - self.end.y
             d = math.sqrt(dx * dx + dy * dy)
             if d <= self.expandDis:
+                if not self.__CollisionCheck(newNode, obstacleList,self.end):
+                    continue
+                else:
+                
                 #print("Goal!!")
-                break
+                    break
 
             if animation:
                 self.DrawGraph(rnd)
@@ -156,35 +160,59 @@ class RRT():
         return minind
 
     def __CollisionCheck(self, node,obstacleList,nearestNode):
-        p2 = LineString([(nearestNode.x,nearestNode.y),(node.x,node.y)])
-        for poly in obstacleList:
-            p1 = Polygon(poly)
-            if p1.intersects(p2):
-#                print "collision"
-                return False
-#        print "safe"
-        return True
+        x1 = nearestNode.x
+        y1 = nearestNode.y
+        x2 = node.x
+        y2 = node.y
+        first = [x1,y1]
+        second = [x2,y2]
+        return LineCollisionCheck(first,second,obstacleList)
+
 
 def LineCollisionCheck(first,second, obstacleList):
+    from shapely import geometry,wkt
+    EPS = 1e-15
     x1 = first[0]
     y1 = first[1]
     x2 = second[0]
     y2 = second[1]
-
-    try:
-        a=y2-y1
-        b=-(x2-x1)
-        c=y2*(x2-x1)-x2*(y2-y1)
-    except ZeroDivisionError:
-        return False
-
-    p2 = LineString([(x1,y1),(x2,y2)])
-    for poly in obstacleList:
-        p1 = Polygon(poly)
-        if p1.intersects(p2):
-#            print "collision"
+    
+#    p2 = LineString([(x1,y1),(x2,y2)])
+#    for poly in obstacleList:
+#        p1 = Polygon(poly)
+#        if (p1.intersects(p2)):
+##            print "collision"
+#            return False
+##    print "safe"
+#    return True
+    line = geometry.LineString([(x1,y1),(x2,y2)])
+#    if line.is_valid == False:
+#        print "not line"
+#        return False
+    for p1 in obstacleList:
+        
+#        print line
+        poly = geometry.Polygon(p1)
+#        if poly.is_valid == False:
+#            print "not valid"
+#            return False
+        ips = line.intersection(poly.boundary)
+#        print ips
+        if type(ips) is Point:
+#            print "hello"
+            if ips.distance(poly) < EPS:
+#                print "INTERSECT"
+                return False
+        elif type(ips) is MultiPoint:
+            for i in ips:
+                if (i.distance(poly) <EPS):
+#                    print "INTERSECT2"
+                    return False
+        elif type(ips) is GeometryCollection:
+            continue
+        else:
+            print (ips,type(ips))
             return False
-#    print "safe"
     return True
 
 def supersmoothie(smoothie,obstacleList):
