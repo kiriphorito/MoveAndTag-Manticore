@@ -128,7 +128,7 @@ class RRT():
     Class for RRT Planning
     """
     
-    def __init__(self, start, goal, obstacleList, randArea,expandDis=3.0,goalSampleRate=5,maxIter=500):
+    def __init__(self, start, goal, obstacleList, randArea,expandDis=1.0,goalSampleRate=5,maxIter=500):
         u"""
         Setting Parameter
 
@@ -274,6 +274,7 @@ class Queue:
 def awakeRobots():
     global global_robots_queue
     while global_robots_queue.isEmpty() == False: ##while queue is not empty
+        
         print global_robots_queue.printItems()
         nextRobot = global_robots_queue.dequeue()
         currentNode = nextRobot['startCoord']
@@ -374,14 +375,14 @@ def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
 
 
 
-robots = [(2,9),(4,4),(7,5),(10,10),(12,15),(15,16)]
+robots = [(2,9),(4,4),(7,5),(10,10)]
 
 obstacleList = [[(1,6),(1,1),(5,1),(5,5),(3,5),(3,3),(4,3),(4,2),(2,2),(2,6),(6,6),(6,0),(0,0),(0,6)]]
 
 start = (4,4)
 goal = (7,5)
 rand = (-1,20)
-global_unawakenRobots = [(2,9),(7,5),(10,10),(12,15),(15,16)]
+global_unawakenRobots = [(2,9),(7,5),(10,10)]
 
 global_path = []
 global_robots_queue = Queue()
@@ -389,8 +390,11 @@ startLoop = {'startCoord': start, 'obstacleList': obstacleList, 'previousPath': 
 global_robots_queue.enqueue(startLoop)
 awakeRobots()
 
-samLines([[(4, 4), (4.699510163001379, 1.082692074556101), (1.7893181648472947, 1.811240311723648), (2, 9), (2, 9), (6.396918586033791, 6.447304816741554), (7, 5), (7, 5), (7, 5), (7, 5), (7, 5)], [(7,5),(12,15)],[(2,9),(10,10),(10,10),(7,5)],[(10,10),(15,16)]])
-         
+print "global path"
+print global_path
+
+#samLines([[(4, 4), (4.699510163001379, 1.082692074556101), (1.7893181648472947, 1.811240311723648), (2, 9), (2, 9), (6.396918586033791, 6.447304816741554), (7, 5), (7, 5), (7, 5), (7, 5), (7, 5)], [(7,5),(12,15)],[(2,9),(10,10),(10,10),(7,5)],[(10,10),(15,16)]])
+
 
 
 drawRobots(robots)
