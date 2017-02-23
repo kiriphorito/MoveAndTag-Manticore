@@ -65,6 +65,7 @@ plt.axes()
 samLines([])
 
 fileName = sys.argv[1] + '.txt' #change here per question
+
 checkState = 0
 robots = []
 polygons = []
