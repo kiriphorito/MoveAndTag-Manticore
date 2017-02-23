@@ -17,9 +17,13 @@ from ast import literal_eval
 import random
 import math
 import copy
+
+
+
 def drawRobots(robots):
     for (x,y) in robots:
         plt.plot(x,y,"o")
+
 
 def drawPolygonNoFill(points,color):
     polygon = plt.Polygon(points,color=color,fill=False)
@@ -47,59 +51,7 @@ def drawPolygonsNoFill(polygons):
     except ValueError:
         print ("no polygons specified")
 
-def LineCollisionCheck(first,second, obstacleList):
-    from shapely import geometry,wkt
-    EPS = 1e-15
-    x1 = first[0]
-    y1 = first[1]
-    x2 = second[0]
-    y2 = second[1]
-    line = geometry.LineString([(x1,y1),(x2,y2)])
-    for p1 in obstacleList:
-        poly = geometry.Polygon(p1)
-        ips = line.intersection(poly.boundary)
-        if type(ips) is Point:
-            if ips.distance(poly) < EPS:
-                return False
-        elif type(ips) is MultiPoint:
-            for i in ips:
-                if (i.distance(poly) <EPS):
-                    return False
-        elif type(ips) is GeometryCollection:
-            continue
-        else:
-            print (ips,type(ips))
-            return False
-    return True
 
-def supersmoothie(smoothie,obstacleList):
-    path = smoothie
-    state = True
-    counter1 = 0
-    counter2 = len(path)-1
-    while state:
-        counter2 = len(path)-1
-        if counter1 == counter2:
-            state = False
-            break
-        coord1 = path[counter1]
-        for counter in range(counter2,0,-1):
-            coord2 = path[counter]
-            if LineCollisionCheck(coord1,coord2,obstacleList): #if no obstacle
-                del path[(counter1+1):(counter)]
-                break
-        counter1 += 1
-    return path
-
-class Node():
-    u"""
-        RRT Node
-        """
-    
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.parent = None
 
 class RRT():
     u"""
@@ -130,8 +82,7 @@ class RRT():
 
         animation: flag for animation on or off
         """
-        robots = [(2,9),(7,5)]
-        
+
         self.nodeList = [self.start]
         while True:
             # Random Sampling
@@ -152,32 +103,29 @@ class RRT():
             newNode.x += self.expandDis * math.cos(theta)
             newNode.y += self.expandDis * math.sin(theta)
             newNode.parent = nind
-            path = []
 
             if not self.__CollisionCheck(newNode, obstacleList,nearestNode):
                 continue
 
             self.nodeList.append(newNode)
-            check = False
-            for (gx,gy) in robots:
-                # check goal
-                dx = newNode.x - gx
-                dy = newNode.y - gy
-                d = math.sqrt(dx * dx + dy * dy)
-                if d <= self.expandDis:
-                    if not self.__CollisionCheck(newNode, obstacleList,Node(gx,gy)): #if intersects
-                        continue
-                    else:
-                        print "ok"
-                        print (gx,gy)
-                        path += [[gx,gy]]
-                        check = True
-                        #print("Goal!!")
-                        break
+
+            # check goal
+            dx = newNode.x - self.end.x
+            dy = newNode.y - self.end.y
+            d = math.sqrt(dx * dx + dy * dy)
+            if d <= self.expandDis:
+                if not self.__CollisionCheck(newNode, obstacleList,self.end):
+                    continue
+                else:
+                
+                #print("Goal!!")
+                    break
+
+            if animation:
+                self.DrawGraph(rnd)
+
             
-            if check:
-                break
-#        path=[[self.end.x,self.end.y]]
+        path=[[self.end.x,self.end.y]]
         lastIndex = len(self.nodeList) - 1
         while self.nodeList[lastIndex].parent is not None:
             node = self.nodeList[lastIndex]
@@ -186,6 +134,25 @@ class RRT():
         path.append([self.start.x, self.start.y])
 
         return path
+
+    def DrawGraph(self,rnd=None):
+        u"""
+        Draw Graph
+        """
+        import matplotlib.pyplot as plt
+        plt.clf()
+        if rnd is not None:
+            plt.plot(rnd[0], rnd[1], "^k")
+        for node in self.nodeList:
+            if node.parent is not None:
+                plt.plot([node.x, self.nodeList[node.parent].x], [node.y, self.nodeList[node.parent].y], "-g")
+#        plt.plot([ox for (ox,oy,size) in obstacleList],[oy for (ox,oy,size) in obstacleList], "ok", ms=size * 20)
+        drawPolygons(obstacleList)
+        plt.plot(self.start.x, self.start.y, "xr")
+        plt.plot(self.end.x, self.end.y, "xr")
+        plt.axis()
+        plt.grid(True)
+        plt.pause(0.01)
 
     def GetNearestListIndex(self, nodeList, rnd):
         dlist = [(node.x - rnd[0]) ** 2 + (node.y - rnd[1]) ** 2 for node in nodeList]
@@ -202,29 +169,100 @@ class RRT():
         return LineCollisionCheck(first,second,obstacleList)
 
 
+def LineCollisionCheck(first,second, obstacleList):
+    from shapely import geometry,wkt
+    EPS = 1.2e-16 #======= may need to change this value depending on precision
+    x1 = first[0]
+    y1 = first[1]
+    x2 = second[0]
+    y2 = second[1]
+    
+    line = geometry.LineString([(x1,y1),(x2,y2)])
+    
+#============ changed here =======
 
+    
+#    for p1 in obstacleList:
+#        
+#        poly = geometry.Polygon(p1)
+#        ips = line.intersection(poly.boundary)
+##        print ips
+#        if type(ips) is Point:
+##            print "hello"
+#            if ips.distance(poly) < EPS:
+##                print "INTERSECT"
+#                return False
+#        elif type(ips) is MultiPoint:
+#            for i in ips:
+#                if (i.distance(poly) <EPS):
+##                    print "INTERSECT2"
+#                    return False
+#        elif type(ips) is GeometryCollection:
+#            continue
+#        else:
+#            print (ips,type(ips))
+#            return False
+#    return True
 
+#============ changed here =======
 
-#=====end of RRT class
+    for poly in obstacleList:
+        p1 = Polygon(poly)
+        if p1.buffer(EPS).intersects(line):
+            #                print "collision"
+            return False
+    #        print "safe"
+    return True
+
+#============ changed here =======
+
+def supersmoothie(smoothie,obstacleList):
+    path = smoothie
+    state = True
+    counter1 = 0
+    counter2 = len(path)-1
+    while state:
+        counter2 = len(path)-1
+        if counter1 == counter2:
+            state = False
+            break
+        coord1 = path[counter1]
+        for counter in range(counter2,0,-1):
+            coord2 = path[counter]
+            if LineCollisionCheck(coord1,coord2,obstacleList): #if no obstacle
+                del path[(counter1+1):(counter)]
+                break
+        counter1 += 1
+    return path
+
+class Node():
+    u"""
+    RRT Node
+    """
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.parent = None
+
 
 def rrtpath(obstacles,startcoord,goalcoord,randAreas):
     rrt = RRT(start=startcoord, goal=goalcoord,randArea = randAreas, obstacleList=obstacles)
     path= rrt.Planning(animation=False)
+#    rrt.DrawGaph()
+#    plt.plot([x for (x,y) in path], [y for (x,y) in path],'-r')
+#    print path
     smoothiePath = supersmoothie(path,obstacles)
     plt.plot([x for (x,y) in smoothiePath], [y for (x,y) in smoothiePath],'-r')
     smoothiePath.reverse()
-    print smoothiePath
+    #print smoothiePath
     return smoothiePath
-robots = [(2,9),(4,4),(7,5)]
 
-obstacleList = [[(1,6),(1,1),(5,1),(5,5),(3,5),(3,3),(4,3),(4,2),(2,2),(2,6),(6,6),(6,0),(0,0),(0,6)]]
+robots = []
 
-start = (4,4)
-goal = (7,5)
-rand = (-1,12)
-rrtpath(obstacleList,start,goal,rand)
+obstacleList =
 
-#rrtpath(obstacleList,robots,start,rand) #return closest node 
+rand = (0,0)
 
 
 drawRobots(robots)
