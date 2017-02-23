@@ -392,7 +392,9 @@ print global_path
 
 
 plt.plot([x for (x,y) in []], [y for (x,y) in []],'-r')
-samLines(global_path)
+#samLines(global_path)
+
+
 
 
 

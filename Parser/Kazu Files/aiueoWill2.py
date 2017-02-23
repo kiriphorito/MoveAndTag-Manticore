@@ -337,28 +337,26 @@ def rrtpath(obstacles,startcoord,goalcoord,randAreas):
 def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
     global global_unawakenRobots
     global global_path
-    unawakenRobots = global_unawakenRobots
-    print ("left",unawakenRobots)
-    print len(unawakenRobots)
-    if len(unawakenRobots) == 0:
+    print len(global_unawakenRobots)
+    if len(global_unawakenRobots) == 0:
         print "0 left"
         print previousPath
         global_path.append(previousPath)
         return
-    if len(unawakenRobots) == 1:
+    if len(global_unawakenRobots) == 1:
         print "final"
-        a= rrtpath(obstacleList,currentNode[0],unawakenRobots[-1],rand)
+        a= rrtpath(obstacleList,currentNode[0],global_unawakenRobots[-1],rand)
         foundNode = a['node']
-        global_unawakenRobots = [item for item in unawakenRobots if item != foundNode[0]]
+        global_unawakenRobots = [item for item in global_unawakenRobots if item != foundNode[0]]
         newPath = previousPath + a['path']
         print newPath
         global_path.append(newPath)
         return
     if numAct == 1:
         print "num = 1"
-        a = rrtpath(obstacleList,currentNode,unawakenRobots[-1],rand)
+        a = rrtpath(obstacleList,currentNode,global_unawakenRobots[-1],rand)
         foundNode = a['node']
-        global_unawakenRobots = [item for item in unawakenRobots if item != foundNode[0]]
+        global_unawakenRobots = [item for item in global_unawakenRobots if item != foundNode[0]]
         print a['path']
         newPath = previousPath + a['path']
         print newPath
@@ -375,10 +373,10 @@ def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
         else:
             print "list"
             fixedTypeCurrentNode = currentNode[0]
-        print (currentNode,unawakenRobots[-1])
-        a = rrtpath(obstacleList,fixedTypeCurrentNode,unawakenRobots[-1],rand)
+        print (currentNode,global_unawakenRobots[-1])
+        a = rrtpath(obstacleList,fixedTypeCurrentNode,global_unawakenRobots[-1],rand)
         foundNode = a['node']
-        global_unawakenRobots = [item for item in unawakenRobots if item != foundNode[0]]
+        global_unawakenRobots = [item for item in global_unawakenRobots if item != foundNode[0]]
         newPath = previousPath + a['path']
         nextLoop = {'startCoord': foundNode, 'obstacleList': obstacleList, 'previousPath': newPath, 'rand': rand, 'numRobotsAtNode': 2}
         print "robot 1"
@@ -386,10 +384,10 @@ def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
         print nextLoop
         global_robots_queue.enqueue(nextLoop)
 #        rrtshortestpath(foundNode,obstacleList,newPath,rand,2)
-        b = rrtpath(obstacleList,fixedTypeCurrentNode,unawakenRobots[-1],rand)
+        b = rrtpath(obstacleList,fixedTypeCurrentNode,global_unawakenRobots[-1],rand)
         foundNode = b['node']
-        global_unawakenRobots = [item for item in unawakenRobots if item != foundNode[0]]
-        newPath = [b['path']]
+        global_unawakenRobots = [item for item in global_unawakenRobots if item != foundNode[0]]
+        newPath = b['path']
         nextLoop = {'startCoord': foundNode, 'obstacleList': obstacleList, 'previousPath': newPath, 'rand': rand, 'numRobotsAtNode': 2}
         print "robot 2"
         print newPath
@@ -421,7 +419,7 @@ print global_path
 
 #samLines([[(4, 4), (4.699510163001379, 1.082692074556101), (1.7893181648472947, 1.811240311723648), (2, 9), (2, 9), (6.396918586033791, 6.447304816741554), (7, 5), (7, 5), (7, 5), (7, 5), (7, 5)], [(7,5),(12,15)],[(2,9),(10,10),(10,10),(7,5)],[(10,10),(15,16)]])
 
-
+samLines(global_path)
 
 drawRobots(robots)
 drawPolygons(obstacleList)
