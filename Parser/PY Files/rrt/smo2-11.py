@@ -145,7 +145,7 @@ class RRT():
 
     def GetNearestListIndex(self, nodeList, rnd):
         dlist = [(node.x - rnd[0]) ** 2 + (node.y - rnd[1]) ** 2 for node in nodeList]
-        minind = dlist.index(min(dlist))
+        minind = dlist.index(min(d list))
         return minind
 
     def __CollisionCheck(self, node,obstacleList,nearestNode):
