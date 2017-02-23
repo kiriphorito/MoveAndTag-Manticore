@@ -135,6 +135,7 @@ class RRT():
 
         animation: flag for animation on or off
         """
+        paths = [[(self.start.x,self.start.y)]]
         robots = self.robots
         minDis = 1000000000
 #        currentDestination = goal
@@ -196,6 +197,12 @@ class RRT():
 #                    print (gx,gy)
                     path += [[gx,gy]]
                     check = True
+                    for p in paths:
+                        if cmp(p[0],(self.start.x,self.start.y)) == 0:
+                            p += [(gx,gy)]
+                            paths += [[(gx,gy)]]
+                            print paths
+                    
                     #print("Goal!!")
                     break
             
