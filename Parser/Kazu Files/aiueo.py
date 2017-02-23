@@ -130,7 +130,7 @@ class RRT():
     Class for RRT Planning
     """
 
-    def __init__(self, start, goal, obstacleList, randArea,expandDis=1.0,goalSampleRate=5,maxIter=500):
+    def __init__(self, start, goal, obstacleList, randArea,expandDis=2.0,goalSampleRate=20,maxIter=500):
         u"""
         Setting Parameter
 
@@ -298,7 +298,7 @@ def rrtpath(obstacles,startcoord,goalcoord,randAreas):
     answer = rrt.Planning(animation=True)
     path= answer['path']
     smoothiePath = supersmoothie(path,obstacles)
-    plt.plot([x for (x,y) in smoothiePath], [y for (x,y) in smoothiePath],'-r')
+#    plt.plot([x for (x,y) in smoothiePath], [y for (x,y) in smoothiePath],'-r')
     smoothiePath.reverse()
     print smoothiePath
     return {'path': smoothiePath, 'node': answer['node']}
@@ -371,14 +371,14 @@ def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
     return
 
 
-robots = [(4,4),(2,9),(7,5),(10,10),(12,13),(-5,-4),(2,11)]
+robots = [(4,4),(2,9),(7,5),(10,10),(12,13),(2,11)]
 
 obstacleList = [[(1,6),(1,1),(5,1),(5,5),(3,5),(3,3),(4,3),(4,2),(2,2),(2,6),(6,6),(6,0),(0,0),(0,6)]]
 
 start = robots[0]
 goal = (7,5)
-rand = (-1,20)
-global_unawakenRobots = [(2,9),(7,5),(10,10),(12,13),(-5,-4),(2,11)]
+rand = (-1,15)
+global_unawakenRobots = [(2,9),(7,5),(10,10),(12,13),(2,11)]
 
 
 global_path = []
@@ -390,6 +390,8 @@ awakeRobots()
 print "global path"
 print global_path
 
+
+plt.plot([x for (x,y) in []], [y for (x,y) in []],'-r')
 samLines(global_path)
 
 
