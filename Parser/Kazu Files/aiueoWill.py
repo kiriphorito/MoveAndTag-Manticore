@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 u"""
-@brief: Path Planning Sample Code with Randamized Rapidly-Exploring Random Trees (RRT) 
+@brief: Path Planning Sample Code with Randamized Rapidly-Exploring Random Trees (RRT)
 
 @author: AtsushiSakai
 
@@ -13,6 +13,9 @@ import shapely
 from shapely.geometry import Polygon, LineString, Point, MultiPoint, GeometryCollection
 import matplotlib.pyplot as plt
 from ast import literal_eval
+import threading
+import time
+
 
 import random
 import math
@@ -95,7 +98,7 @@ class Node():
     u"""
         RRT Node
         """
-    
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -105,7 +108,7 @@ class RRT():
     u"""
     Class for RRT Planning
     """
-    
+
     def __init__(self, start, goal, obstacleList,randArea,robots,expandDis=1.0,goalSampleRate=50,maxIter=500):
         u"""
         Setting Parameter
@@ -124,14 +127,14 @@ class RRT():
         self.expandDis = expandDis
         self.goalSampleRate = goalSampleRate
         self.maxIter = maxIter
-        
+
         self.robots.remove(start)
-    
+
         print self.robots
-    
+
     def Planning(self,animation=True):
         u"""
-        Pathplanning 
+        Pathplanning
 
         animation: flag for animation on or off
         """
@@ -161,7 +164,7 @@ class RRT():
             newNode.y += self.expandDis * math.sin(theta)
             newNode.parent = nind
             path = []
-            
+
 
             if not self.__CollisionCheck(newNode, obstacleList,nearestNode):
                 continue
@@ -182,7 +185,7 @@ class RRT():
                     minDis = d
                     self.end = Node(gx,gy)
                     print self.end.x,self.end.y
-            
+
             # check goal
             gx = self.end.x
             gy = self.end.y
@@ -202,10 +205,10 @@ class RRT():
                             p += [(gx,gy)]
                             paths += [[(gx,gy)]]
                             print paths
-                    
+
                     #print("Goal!!")
                     break
-            
+
 #            if check:
 #                break
 #        path=[[self.end.x,self.end.y]]
@@ -245,17 +248,44 @@ def rrtpath(obstacles,startcoord,goalcoord,randAreas,robots):
     plt.plot([x for (x,y) in smoothiePath], [y for (x,y) in smoothiePath],'-r')
     smoothiePath.reverse()
     return smoothiePath
+
+class myThread (threading.Thread):
+    def __init__(self, threadID, name, ):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        # self.rand = rand
+        # self.obstacleList = obstacleList
+        # self.start = start
+        # self.goal = goal
+        # self.robots = robots
+        print "OK"
+    def run(self,obstacleList, start, goal, rand,robots):
+        print "Y"
+        rrtpath(obstacleList,start,goal,rand,robots)
+
 robots = [(4,4),(-1,5),(7,0),(1.5,10)]
+
+
 
 obstacleList = [[(1,6),(1,1),(5,1),(5,5),(3,5),(3,3),(4,3),(4,2),(2,2),(2,6),(6,6),(6,0),(0,0),(0,6)]]
 
 start = (4,4)
 goal = (7,5)
-rand = (-2,8)
-rrtpath(obstacleList,start,goal,rand,robots)
+rand = (-1,8)
+
+# Create new threads
+thread1 = myThread(1, "Thread-1")
+thread2 = myThread(2, "Thread-2")
+
+# Start new Threads
+thread1.run(obstacleList, start, goal, rand,robots)
+thread2.run(obstacleList, goal, start, rand,robots)
+
+
 #robots = [(4,4),(-1,5),(7,0)]
 
-#rrtpath(obstacleList,robots,start,rand) #return closest node 
+#rrtpath(obstacleList,robots,start,rand) #return closest node
 
 
 drawRobots(robots)
