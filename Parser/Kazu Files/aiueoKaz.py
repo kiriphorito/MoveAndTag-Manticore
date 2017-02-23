@@ -315,7 +315,7 @@ def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
         print previousPath
         global_path.append(previousPath)
         return
-    if len(unawakenRobots) == 1:
+    if ((numAct == 2) & (len(unawakenRobots) == 1)):
         print "final"
         a= rrtpath(obstacleList,currentNode[0],unawakenRobots[-1],rand)
         foundNode = a['node']
@@ -355,6 +355,9 @@ def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
         print newPath
         print nextLoop
         global_robots_queue.enqueue(nextLoop)
+        unawakenRobots = global_unawakenRobots
+        if len(unawakenRobots) == 0:
+            return
 #        rrtshortestpath(foundNode,obstacleList,newPath,rand,2)
         b = rrtpath(obstacleList,fixedTypeCurrentNode,unawakenRobots[-1],rand)
         foundNode = b['node']
@@ -377,14 +380,14 @@ def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
 
 
 
-robots = [(4,4),(2,9),(7,5),(10,10)]
+robots = [(4,4),(2,9),(7,5),(10,10),(12,5),(5,15)]
 
 obstacleList = [[(1,6),(1,1),(5,1),(5,5),(3,5),(3,3),(4,3),(4,2),(2,2),(2,6),(6,6),(6,0),(0,0),(0,6)]]
 
 start = robots[0]
 goal = (7,5)
 rand = (-1,20)
-global_unawakenRobots = [(2,9),(7,5),(10,10)]
+global_unawakenRobots = [(2,9),(7,5),(10,10),(12,5),(5,15)]
 
 global_path = []
 global_robots_queue = Queue()

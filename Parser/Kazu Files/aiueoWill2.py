@@ -313,6 +313,10 @@ def awakeRobots():
         previousPath = nextRobot['previousPath']
         numRobotsAtNode = nextRobot['numRobotsAtNode']
         rand = nextRobot['rand']
+#        if ((rand == 2) & (global_robots_queue.isEmpty())):
+#            print "no left"
+#            global_path.append(previousPath)
+#        else:
         rrtshortestpath(currentNode,obstacleList,previousPath,rand,numRobotsAtNode)
 
     print "complete awakening all robots"
@@ -399,14 +403,14 @@ def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
 
     return
 
-robots = [(4,4),(-1,-1),(10,10),(-1,7)]
+robots = [(4,4),(-1,-1),(10,10),(-1,7),(10,4)]
 
 obstacleList = [[(1,6),(1,1),(5,1),(5,5),(3,5),(3,3),(4,3),(4,2),(2,2),(2,6),(6,6),(6,0),(0,0),(0,6)]]
 
 start = (4,4)
 goal = (10,10)
 rand = (-2,20)
-global_unawakenRobots = [(-1,-1),(10,10),(-1,7)]
+global_unawakenRobots = [(-1,-1),(10,10),(-1,7),(10,4)]
 
 global_path = []
 global_robots_queue = Queue()
