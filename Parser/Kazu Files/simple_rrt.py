@@ -60,7 +60,7 @@ class RRT():
 
         animation: flag for animation on or off
         """
-
+        
         self.nodeList = [self.start]
         while True:
             # Random Sampling

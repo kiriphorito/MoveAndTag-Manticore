@@ -2,6 +2,7 @@
 # coding: UTF-8
 import matplotlib.pyplot as plt
 from ast import literal_eval
+import sys
 
 
 def drawPolygon(points):
@@ -61,9 +62,10 @@ def samLines(coords):
 
 plt.axes()
 
+samLines([])
 
+fileName = sys.argv[1] + '.txt' #change here per question
 
-fileName = '28.txt' #change here per question
 checkState = 0
 robots = []
 polygons = []
@@ -92,7 +94,7 @@ drawRobots(robotpoints)
 
 polygonpoints = list(literal_eval(polygons[0]))
 print polygonpoints
-drawPolygonsNoFill(polygonpoints)
+drawPolygons(polygonpoints)
 
 plt.axis('scaled')
 plt.show()
