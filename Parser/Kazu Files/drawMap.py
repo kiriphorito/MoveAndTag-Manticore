@@ -65,7 +65,7 @@ plt.axes()
 
 samLines([[[2, 9], [10, 10]], [[4, 4], [4.189698372914962, 1.3105536001954237], [1.3823020698027326, 2.1346580185748376], [2, 9], [2, 9], [12, 5], [12, 5], [7, 5]], [[12, 5], [5, 15]]])
 
-fileName = '2.txt' #change here per question
+fileName = '29.txt' #change here per question
 
 checkState = 0
 robots = []
