@@ -17,6 +17,8 @@ from ast import literal_eval
 import random
 import math
 import copy
+
+global global_unawakenRobots
 def drawRobots(robots):
     for (x,y) in robots:
         plt.plot(x,y,"o")
@@ -106,7 +108,7 @@ class RRT():
     Class for RRT Planning
     """
     
-    def __init__(self, start, goal, obstacleList,randArea,expandDis=1.0,goalSampleRate=5,maxIter=500):
+    def __init__(self, start, goal, obstacleList, randArea,expandDis=1.0,goalSampleRate=5,maxIter=500):
         u"""
         Setting Parameter
 
@@ -123,6 +125,7 @@ class RRT():
         self.expandDis = expandDis
         self.goalSampleRate = goalSampleRate
         self.maxIter = maxIter
+        self.robots = global_unawakenRobots
     
     def Planning(self,animation=True):
         u"""
@@ -130,7 +133,7 @@ class RRT():
 
         animation: flag for animation on or off
         """
-        robots = [(2,9),(7,5)]
+        robots = self.robots
         
         self.nodeList = [self.start]
         while True:
@@ -153,7 +156,7 @@ class RRT():
             newNode.y += self.expandDis * math.sin(theta)
             newNode.parent = nind
             path = []
-
+            foundNode = []
             if not self.__CollisionCheck(newNode, obstacleList,nearestNode):
                 continue
 
@@ -171,10 +174,15 @@ class RRT():
                         print "ok"
                         print (gx,gy)
                         path += [[gx,gy]]
+                        foundNode.append((gx,gy))
                         check = True
                         #print("Goal!!")
                         break
-            
+        
+            if animation:
+                self.DrawGraph(rnd)
+
+
             if check:
                 break
 #        path=[[self.end.x,self.end.y]]
@@ -185,7 +193,27 @@ class RRT():
             lastIndex = node.parent
         path.append([self.start.x, self.start.y])
 
-        return path
+        return {'path': path, 'node': foundNode}
+
+    def DrawGraph(self,rnd=None):
+        u"""
+            Draw Graph
+            """
+        import matplotlib.pyplot as plt
+        plt.clf()
+        if rnd is not None:
+            plt.plot(rnd[0], rnd[1], "^k")
+            for node in self.nodeList:
+                if node.parent is not None:
+                    plt.plot([node.x, self.nodeList[node.parent].x], [node.y, self.nodeList[node.parent].y], "-g")
+        
+        drawRobots(robots)
+        drawPolygons(obstacleList)
+        plt.plot(self.start.x, self.start.y, "xr")
+        plt.plot(self.end.x, self.end.y, "xr")
+        plt.axis('scaled')
+        plt.grid(True)
+        plt.pause(0.01)
 
     def GetNearestListIndex(self, nodeList, rnd):
         dlist = [(node.x - rnd[0]) ** 2 + (node.y - rnd[1]) ** 2 for node in nodeList]
@@ -209,12 +237,79 @@ class RRT():
 
 def rrtpath(obstacles,startcoord,goalcoord,randAreas):
     rrt = RRT(start=startcoord, goal=goalcoord,randArea = randAreas, obstacleList=obstacles)
-    path= rrt.Planning(animation=False)
+    answer = rrt.Planning(animation=True)
+    path= answer['path']
     smoothiePath = supersmoothie(path,obstacles)
     plt.plot([x for (x,y) in smoothiePath], [y for (x,y) in smoothiePath],'-r')
     smoothiePath.reverse()
     print smoothiePath
-    return smoothiePath
+    return {'path': smoothiePath, 'node': answer['node']}
+
+
+def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
+    global global_unawakenRobots
+    unawakenRobots = global_unawakenRobots
+    print ("left",unawakenRobots)
+    print len(unawakenRobots)
+    if len(unawakenRobots) == 0:
+        print "0 left"
+        return
+    if len(unawakenRobots) == 1:
+        print "final"
+        print (currentNode,unawakenRobots[-1])
+        a= rrtpath(obstacleList,currentNode[0],unawakenRobots[-1],rand)
+        foundNode = a['node']
+        global_unawakenRobots = [item for item in unawakenRobots if item != foundNode[0]]
+        print previousPath
+        print a['path']
+        newPath = previousPath + a['path']
+        print newPath
+        return
+    if numAct == 1:
+        print "num = 1"
+        a = rrtpath(obstacleList,currentNode,unawakenRobots[-1],rand)
+        foundNode = a['node']
+        global_unawakenRobots = [item for item in unawakenRobots if item != foundNode[0]]
+        print ("unawaken = ",unawakenRobots)
+        print previousPath
+        print a['path']
+        newPath = previousPath + a['path']
+        print newPath
+        print "finding next node"
+        rrtshortestpath(foundNode[0],obstacleList,newPath,rand,2)
+        return
+    elif numAct == 2:
+        print "num = 2"
+        if(type(currentNode)== tuple):
+            fixedTypeCurrentNode = currentNode
+            print "tuple"
+        else:
+            print "list"
+            fixedTypeCurrentNode = currentNode[0]
+        print (currentNode,unawakenRobots[-1])
+        a = rrtpath(obstacleList,fixedTypeCurrentNode,unawakenRobots[-1],rand)
+        foundNode = a['node']
+        global_unawakenRobots = [item for item in unawakenRobots if item != foundNode[0]]
+        print ("unawaken 1= ",unawakenRobots)
+        newPath = previousPath + a['path']
+        rrtshortestpath(foundNode,obstacleList,newPath,rand,2)
+        return 
+#        b = rrtpath(obstacleList,currentNode,unawakenRobots[-1],rand)
+#        foundNode = b['node']
+#        global_unawakenRobots = [item for item in unawakenRobots if item != foundNode[0]]
+#        print ("unawaken 2= ",unawakenRobots)
+#        newPath = [b['path']]
+#        rrtshortestpath(foundNode,obstacleList,newPath,rand,2)
+#        return
+
+    return
+
+
+
+
+
+
+
 robots = [(2,9),(4,4),(7,5)]
 
 obstacleList = [[(1,6),(1,1),(5,1),(5,5),(3,5),(3,3),(4,3),(4,2),(2,2),(2,6),(6,6),(6,0),(0,0),(0,6)]]
@@ -222,7 +317,28 @@ obstacleList = [[(1,6),(1,1),(5,1),(5,5),(3,5),(3,3),(4,3),(4,2),(2,2),(2,6),(6,
 start = (4,4)
 goal = (7,5)
 rand = (-1,12)
-rrtpath(obstacleList,start,goal,rand)
+global_unawakenRobots = [(2,9),(7,5),(10,10)]
+
+print global_unawakenRobots[-1]
+#a = rrtpath(obstacleList,start,global_unawakenRobots[-1],rand)
+rrtshortestpath(start,obstacleList,[],rand,1)
+
+#print ("unawaken = ",unawakenRobots)
+#
+#a = rrtpath(obstacleList,start,goal,rand)
+#print a
+##print ("path = ", a['path'])
+##print ("found node = ", a['node'])
+#nextNode = a['node']
+#print nextNode[0]
+#
+##ab= unawakenRobots
+##unawakenRobots = [item for item in ab if item != nextNode[0]]
+#unawakenRobots = [item for item in unawakenRobots if item != nextNode[0]]
+#print ("unawaken = ",unawakenRobots)
+##unawakenRobots.
+#b = rrtpath(obstacleList,nextNode[0],goal,rand)
+#print b
 
 #rrtpath(obstacleList,robots,start,rand) #return closest node 
 
