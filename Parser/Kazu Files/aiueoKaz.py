@@ -377,9 +377,6 @@ def rrtshortestpath(currentNode,obstacleList,previousPath,rand,numAct):
 
 
 
-
-
-
 robots = [(4,4),(2,9),(7,5),(10,10),(12,5),(5,15)]
 
 obstacleList = [[(1,6),(1,1),(5,1),(5,5),(3,5),(3,3),(4,3),(4,2),(2,2),(2,6),(6,6),(6,0),(0,0),(0,6)]]
