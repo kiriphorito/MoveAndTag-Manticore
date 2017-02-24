@@ -5,63 +5,15 @@ from ast import literal_eval
 import sys
 import ast
 
+maxpath = sys.argv[2]
 
-def drawPolygon(points):
-    polygon = plt.Polygon(points)
-    plt.gca().add_patch(polygon)
-
-def drawPolygons(polygons):
-    try:
-        for xs in polygons:
-            drawPolygon(xs)
-    except ValueError:
-        print ("no polygons specified")
-
-
-def drawLine(points):
-    line = plt.Polygon(points, closed=None, fill=None, edgecolor='r')
-    plt.gca().add_patch(line)
-
-#def drawLines(lines):
-#    for xs in lines:
-#        drawLine(xs)
-
-def drawRobots(robots):
-    for (x,y) in robots:
-        plt.plot(x,y,".")
-
-def drawPolygonNoFill(points,color):
-    polygon = plt.Polygon(points,color=color,fill=False)
-    plt.gca().add_patch(polygon)
-
-def drawPolygonsNoFill(polygons):
-    try:
-        for xs in polygons:
-            drawPolygonNoFill(xs,'red')
-    except ValueError:
-        print ("no polygons specified")
-
-
-def samLines(coords):
-    for lines in coords:
-        print lines
-        prex = "f"
-        prey = "f"
-        for (x,y) in lines:
-            print (x,y)
-            if prex == "f":
-                prex = x
-                prey = y
-            else:
-                line = plt.Polygon([(prex,prey),(x,y)], closed=None, fill=None)
-                plt.gca().add_patch(line)
-                prex = x
-                prey = y
-                print("connecting",(x,y),"to",(prex,prey))
-#plt.plot((0,1),(1,2))
-
-
-plt.axes()
+for i in range(1,maxpath):
+    solutionFileName = 'smo2sol-' + sys.argv[1] + '-path-' + i + '.txt'
+    with open(solutionFileName,'r') as input:
+    for line in input:
+        if 'Time Taken:' in line:
+            continue
+        solution = line
 
 solutionFileName = 'smo2sol-' + sys.argv[1] + '.txt'
 with open(solutionFileName,'r') as input:
