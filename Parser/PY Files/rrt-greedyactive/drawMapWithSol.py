@@ -2,6 +2,7 @@
 # coding: UTF-8
 import matplotlib.pyplot as plt
 from ast import literal_eval
+import numpy
 import sys
 import ast
 
@@ -47,13 +48,14 @@ def samLines(coords):
         print lines
         prex = "f"
         prey = "f"
+        randColor = numpy.random.rand(3,1)
         for (x,y) in lines:
             print (x,y)
             if prex == "f":
                 prex = x
                 prey = y
             else:
-                line = plt.Polygon([(prex,prey),(x,y)], closed=None, fill=None)
+                line = plt.Polygon([(prex,prey),(x,y)], closed=None, fill=None,edgecolor=randColor)
                 plt.gca().add_patch(line)
                 prex = x
                 prey = y

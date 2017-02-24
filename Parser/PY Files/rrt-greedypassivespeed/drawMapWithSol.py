@@ -62,7 +62,7 @@ def samLines(coords):
 
 
 plt.axes()
-
+fileName = str(number)+'.txt'  #change here per question
 solutionFileName = 'smo2sol-' + sys.argv[1] + '.txt'
 with open(solutionFileName,'r') as input:
     for line in input:
