@@ -3,3 +3,8 @@
 /Users/sampham/Projects/SW4/SW4/bin/Debug/SW4.exe
 /Users/sampham/Projects/SW4/SW4/obj/x86/Debug/SW4.exe
 /Users/sampham/Projects/SW4/SW4/obj/x86/Debug/SW4.exe.mdb
+/Users/William/Documents/MoveAndTag-Manticore/Parser/SW4/SW4/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/William/Documents/MoveAndTag-Manticore/Parser/SW4/SW4/bin/Debug/SW4.exe.mdb
+/Users/William/Documents/MoveAndTag-Manticore/Parser/SW4/SW4/bin/Debug/SW4.exe
+/Users/William/Documents/MoveAndTag-Manticore/Parser/SW4/SW4/obj/x86/Debug/SW4.exe
+/Users/William/Documents/MoveAndTag-Manticore/Parser/SW4/SW4/obj/x86/Debug/SW4.exe.mdb
