@@ -1,0 +1,32 @@
+#!/bin/bash
+# A simple script
+python smo2-1.py
+python smo2-2.py
+python smo2-3.py
+python smo2-4.py
+python smo2-5.py
+python smo2-6.py
+python smo2-7.py
+python smo2-8.py
+python smo2-9.py
+python smo2-10.py
+python smo2-11.py
+python smo2-12.py
+python smo2-13.py
+python smo2-14.py
+python smo2-15.py
+python smo2-16.py
+python smo2-17.py
+python smo2-18.py
+python smo2-19.py
+python smo2-20.py
+python smo2-21.py
+python smo2-22.py
+python smo2-23.py
+python smo2-24.py
+python smo2-25.py
+python smo2-26.py
+python smo2-27.py
+python smo2-28.py
+python smo2-29.py
+python smo2-30.py
