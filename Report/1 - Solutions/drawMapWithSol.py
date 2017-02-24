@@ -8,13 +8,13 @@ import ast
 
 
 def drawPolygon(points):
-    polygon = plt.Polygon(points)
+    polygon = plt.Polygon(points,color='black')
     plt.gca().add_patch(polygon)
 
 def drawPolygons(polygons):
     try:
         for xs in polygons:
-            drawPolygon(xs,'black')
+            drawPolygon(xs)
     except ValueError:
         print ("no polygons specified")
 
@@ -64,7 +64,6 @@ def samLines(coords):
 
 
 plt.axes()
-
 solutionFileName = 'smo2sol-' + sys.argv[1] + '.txt'
 with open(solutionFileName,'r') as input:
     for line in input:
