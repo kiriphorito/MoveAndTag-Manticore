@@ -264,10 +264,10 @@ rand = (-56,47)
 
 content = ""
 starttime = datetime.datetime.now()
-print "Path 89 of 109"
+print "Path 89 of 107"
 path = []
-start = (27.004798582219223,-13.595526392738197)
-goal = (32.829623035725206,-16.416245422657802)
+start = (30.688243836065197,-27.638264275473183)
+goal = (37.29140874222303,-23.00812288868028)
 print "     Node 1 and 2 of 2"
 path += rrtpath(obstacleList,start,goal,rand)
 pathStr = str(path)[1:-1] + ";"

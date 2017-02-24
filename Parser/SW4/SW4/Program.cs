@@ -425,7 +425,7 @@ namespace SW4
 
         public void pathGenerator_GreedyPassiveTime()
         {
-            for (int x = 29; x < 30; x++)
+            for (int x = 28; x < 29; x++)
             {
                 Console.WriteLine("         Map: " + (x + 1));
 

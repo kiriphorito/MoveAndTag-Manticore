@@ -264,19 +264,15 @@ rand = (-56,47)
 
 content = ""
 starttime = datetime.datetime.now()
-print "Path 108 of 109"
+print "Path 73 of 107"
 path = []
-start = (-34.44808044925506,-8.22346925983868)
-goal = (-40.19084674282647,-10.115758525377657)
-print "     Node 1 and 2 of 3"
+start = (18.172052586418594,-23.414451210186694)
+goal = (33.96720581948745,-5.944402585190694)
+print "     Node 1 and 2 of 2"
 path += rrtpath(obstacleList,start,goal,rand)
-start = (-40.19084674282647,-10.115758525377657)
-goal = (-43.78882140311762,-10.612931379504376)
-print "     Node 2 and 3 of 3"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
 pathStr = str(path)[1:-1] + ";"
 pathStr = pathStr.replace("[", "(")
 pathStr = pathStr.replace("]", ")")
-f = open('smo2sol-29-path-108.txt', 'a+')
+f = open('smo2sol-29-path-73.txt', 'a+')
 f.write(pathStr)
 f.close
