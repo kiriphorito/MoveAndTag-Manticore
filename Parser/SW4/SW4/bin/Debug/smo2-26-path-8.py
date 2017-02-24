@@ -266,22 +266,7 @@ content = ""
 starttime = datetime.datetime.now()
 print "Path 8 of 111"
 path = []
-start = (3.85553009788822,3.0931619315649073)
-goal = (-1.5176888896037255,-0.22959553114546338)
-print "     Node 1 and 2 of 7"
-path += rrtpath(obstacleList,start,goal,rand)
-start = (-1.5176888896037255,-0.22959553114546338)
-goal = (-10.716101819114712,-5.790846732300842)
-print "     Node 2 and 3 of 7"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
-start = (-10.716101819114712,-5.790846732300842)
-goal = (-13.675305129300952,-8.326621554295293)
-print "     Node 3 and 4 of 7"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
-start = (-13.675305129300952,-8.326621554295293)
-goal = (-22.584853834100464,-16.49129586787894)
-print "     Node 4 and 5 of 7"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
+
 start = (-22.584853834100464,-16.49129586787894)
 goal = (-22.928151277706753,-16.949757993103198)
 print "     Node 5 and 6 of 7"
