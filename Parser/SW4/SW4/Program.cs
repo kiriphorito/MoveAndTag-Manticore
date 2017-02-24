@@ -560,7 +560,7 @@ namespace SW4
             int z = 1;
             foreach (List<string> path in mapPaths[0])
             {
-                result.Add("print \"Path " + z++ + " of " + mapPaths[0].Count + "\"");
+                result.Add("print \"Path " + z + " of " + mapPaths[0].Count + "\"");
                 result.Add("path = []");
                 for (int y = 0; y < path.Count - 1; y++)
                 {
@@ -579,21 +579,22 @@ namespace SW4
                 result.Add("pathStr = str(path)[1:-1] + \";\"");
                 result.Add("pathStr = pathStr.replace(\"[\", \"(\")");
                 result.Add("pathStr = pathStr.replace(\"]\", \")\")");
-                result.Add("f = open('smo2sol-" + mapNumber + ".txt', 'a+')");
+                result.Add("f = open('smo2sol-" + mapNumber + "-path-" + (z) + ".txt', 'a+')");
                 result.Add("f.write(pathStr)");
                 result.Add("f.close");
-                result.Add("content += pathStr");
+				File.WriteAllLines(Environment.CurrentDirectory + "/smo2-" + mapNumber + "-path-" + z + ".py", result);
+				z++;
             }
             //result.Add("endtime = datetime.datetime.now()");
             //result.Add("timeTaken = endtime - starttime");
             //result.Add("tts = str(timeTaken)");
             //result.Add("content = \"Time Taken: \" + tts + \"\\n\" + content");
             //result.Add("content = content[:-1]");
-            result.Add("#plt.axis('scaled')");
-            result.Add("#plt.grid(True)");
-            result.Add("#plt.pause(0.01)  # Need for Mac");
-            result.Add("#plt.show()");
-            File.WriteAllLines(Environment.CurrentDirectory + "/smo2rrt-" + mapNumber + ".py", result);
+            //result.Add("#plt.axis('scaled')");
+            //result.Add("#plt.grid(True)");
+            //result.Add("#plt.pause(0.01)  # Need for Mac");
+            //result.Add("#plt.show()");
+            //File.WriteAllLines(Environment.CurrentDirectory + "/smo2-" + mapNumber + "-path-" + +".py", result);
         }
 
         public void smoPy(int mapNumber)
