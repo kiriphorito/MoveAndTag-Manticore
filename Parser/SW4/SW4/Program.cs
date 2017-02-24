@@ -425,7 +425,7 @@ namespace SW4
 
         public void pathGenerator_GreedyPassiveTime()
         {
-            for (int x = 28; x < 29; x++)
+            for (int x = 24; x < 25; x++)
             {
                 Console.WriteLine("         Map: " + (x + 1));
 
@@ -524,7 +524,66 @@ namespace SW4
             }
         }
 
-        public void smoPyBreak(int mapNumber)
+		public void pyVisSegmentsBreak(int mapNumber)
+		{
+			//List<string> linesBP = lines;
+			//List<string> mapRobotsBP = mapRobots;
+			//List<List<string>> mapRobotsSepBP = mapRobotsSep;
+			//List<List<string>> mapPolygonsBP = mapPolygons;
+			//List<List<List<string>>> mapPathsBP = mapPaths;
+			//List<string> mapRandValuesBP = mapRandValues;
+
+
+			int z = 1;
+			foreach (List<string> path in mapPaths[0])
+			{
+				Console.WriteLine("     Map: " + mapNumber);
+				string polygonContent = "[";
+				if (mapPolygons[mapNumber - 1].Count != 0)
+				{
+					foreach (string polygon in mapPolygons[mapNumber - 1])
+					{
+						polygonContent += "[";
+						//content += polygon;
+						for (int y = 0; y < polygon.Length; y++)
+						{
+							if (polygon[y] == '(')
+							{
+								polygonContent += "vg.Point";
+							}
+							polygonContent += polygon[y];
+						}
+						polygonContent += "],";
+					}
+					polygonContent = polygonContent.Remove(polygonContent.Length - 1);
+				}
+				polygonContent += "]";
+
+				string content = "";
+				List<string> result = new List<string>();
+				result.Add("import pyvisgraph as vg\n");
+				content = "polys = " + polygonContent;
+				result.Add(content);
+				result.Add("g = vg.VisGraph()");
+				result.Add("g.build(polys)");
+				result.Add("print \"Path " + z + " of " + mapPaths[0].Count + "\"");
+				result.Add("path = []");
+				result.Add("shortest = \"\"");
+				for (int y = 0; y < path.Count - 1; y++)
+				{
+					result.Add("print \"     Node " + (y + 1) + " and " + (y + 2) + " of " + path.Count + "\"");
+					result.Add("shortest += g.shortest_path(vg.Point" + mapRobotsSep[mapNumber - 1][y] + ", vg.Point" + mapRobotsSep[mapNumber - 1][y + 1] + ")\n");
+				}
+				result.Add("pathStr = str(shortest)[1:-1] + \";\"");
+				result.Add("f = open('smo2sol-" + mapNumber + "-path-" + (z) + ".txt', 'a+')");
+				result.Add("f.write(pathStr)");
+				result.Add("f.close");
+				File.WriteAllLines(Environment.CurrentDirectory + "/smo2-" + mapNumber + "-path-" + z + ".py", result);
+				z++;
+			}
+		}
+
+        public void smoPySegmentsBreak(int mapNumber)
         {
             //List<string> linesBP = lines;
             //List<string> mapRobotsBP = mapRobots;
@@ -586,16 +645,6 @@ namespace SW4
 				File.WriteAllLines(Environment.CurrentDirectory + "/smo2-" + mapNumber + "-path-" + z + ".py", result);
 				z++;
             }
-            //result.Add("endtime = datetime.datetime.now()");
-            //result.Add("timeTaken = endtime - starttime");
-            //result.Add("tts = str(timeTaken)");
-            //result.Add("content = \"Time Taken: \" + tts + \"\\n\" + content");
-            //result.Add("content = content[:-1]");
-            //result.Add("#plt.axis('scaled')");
-            //result.Add("#plt.grid(True)");
-            //result.Add("#plt.pause(0.01)  # Need for Mac");
-            //result.Add("#plt.show()");
-            //File.WriteAllLines(Environment.CurrentDirectory + "/smo2-" + mapNumber + "-path-" + +".py", result);
         }
 
         public void smoPy(int mapNumber)
@@ -676,7 +725,7 @@ namespace SW4
             //Console.WriteLine("Generating Map");
             for (int x = 1; x <= 1; x++)
             {
-                test.smoPyBreak(29);
+                test.smoPySegmentsBreak(25);
             }
             //Console.WriteLine(MyRound(-2.4343423424));
             //Console.ReadLine();
