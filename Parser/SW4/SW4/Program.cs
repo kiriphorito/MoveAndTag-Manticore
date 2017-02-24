@@ -533,33 +533,34 @@ namespace SW4
             //List<List<List<string>>> mapPathsBP = mapPaths;
             //List<string> mapRandValuesBP = mapRandValues;
 
-            Console.WriteLine("     Map: " + mapNumber);
-            string polygonContent = "[";
-            foreach (string polygon in mapPolygons[mapNumber - 1])
-            {
-                polygonContent += "[" + polygon + "],";
-            }
-            if (mapPolygons[mapNumber - 1].Count != 0)
-                polygonContent = polygonContent.Remove(polygonContent.Length - 1);
-            polygonContent += "]";
-
-            var reader = new StreamReader(Environment.CurrentDirectory + "/rrt.py");
-            string pybeginning = reader.ReadToEnd();
-            List<string> pyBeginningList = pybeginning.Split('\n').ToList();
-
-            string content = "";
-            List<string> result = new List<string>();
-            //result.Add("# Linear Time: " + mapLinearTime[mapNumber - 1]);
-            result = pyBeginningList;
-            content = "obstacleList = " + polygonContent;
-            result.Add(content);
-            result.Add("rand = " + mapRandValues[mapNumber - 1]);
-            result.Add("\ncontent = \"\"");
-            result.Add("starttime = datetime.datetime.now()");
-            content = "";
+            
             int z = 1;
             foreach (List<string> path in mapPaths[0])
             {
+				Console.WriteLine("     Map: " + mapNumber);
+				string polygonContent = "[";
+				foreach (string polygon in mapPolygons[mapNumber - 1])
+				{
+					polygonContent += "[" + polygon + "],";
+				}
+				if (mapPolygons[mapNumber - 1].Count != 0)
+					polygonContent = polygonContent.Remove(polygonContent.Length - 1);
+				polygonContent += "]";
+
+				var reader = new StreamReader(Environment.CurrentDirectory + "/rrt.py");
+				string pybeginning = reader.ReadToEnd();
+				List<string> pyBeginningList = pybeginning.Split('\n').ToList();
+
+				string content = "";
+				List<string> result = new List<string>();
+				//result.Add("# Linear Time: " + mapLinearTime[mapNumber - 1]);
+				result = pyBeginningList;
+				content = "obstacleList = " + polygonContent;
+				result.Add(content);
+				result.Add("rand = " + mapRandValues[mapNumber - 1]);
+				result.Add("\ncontent = \"\"");
+				result.Add("starttime = datetime.datetime.now()");
+				content = "";
                 result.Add("print \"Path " + z + " of " + mapPaths[0].Count + "\"");
                 result.Add("path = []");
                 for (int y = 0; y < path.Count - 1; y++)

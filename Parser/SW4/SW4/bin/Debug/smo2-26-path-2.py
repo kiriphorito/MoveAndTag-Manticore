@@ -264,46 +264,6 @@ rand = (-57,72)
 
 content = ""
 starttime = datetime.datetime.now()
-print "Path 1 of 111"
-path = []
-start = (14.34315733696458,1.6912329390531937)
-goal = (12.044799647618504,1.9620221379939622)
-print "     Node 1 and 2 of 9"
-path += rrtpath(obstacleList,start,goal,rand)
-start = (12.044799647618504,1.9620221379939622)
-goal = (10.270640716826243,2.2931653599403248)
-print "     Node 2 and 3 of 9"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
-start = (10.270640716826243,2.2931653599403248)
-goal = (3.85553009788822,3.0931619315649073)
-print "     Node 3 and 4 of 9"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
-start = (3.85553009788822,3.0931619315649073)
-goal = (1.860732918321773,0.5994308460443634)
-print "     Node 4 and 5 of 9"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
-start = (1.860732918321773,0.5994308460443634)
-goal = (-2.196755055443802,-4.640956390275605)
-print "     Node 5 and 6 of 9"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
-start = (-2.196755055443802,-4.640956390275605)
-goal = (-3.2493702991817273,-19.351727665748307)
-print "     Node 6 and 7 of 9"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
-start = (-3.2493702991817273,-19.351727665748307)
-goal = (-5.129636822329701,-35.089590128698596)
-print "     Node 7 and 8 of 9"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
-start = (-5.129636822329701,-35.089590128698596)
-goal = (-5.726778654371742,-37.97241649855256)
-print "     Node 8 and 9 of 9"
-path += rrtpath(obstacleList,start,goal,rand)[1:]
-pathStr = str(path)[1:-1] + ";"
-pathStr = pathStr.replace("[", "(")
-pathStr = pathStr.replace("]", ")")
-f = open('smo2sol-26-path-1.txt', 'a+')
-f.write(pathStr)
-f.close
 print "Path 2 of 111"
 path = []
 start = (12.044799647618504,1.9620221379939622)
