@@ -425,7 +425,7 @@ namespace SW4
 
         public void pathGenerator_GreedyPassiveTime()
         {
-            for (int x = 0; x < lines.Count; x++)
+            for (int x = 25; x < 26; x++)
             {
                 Console.WriteLine("         Map: " + (x + 1));
 
@@ -549,7 +549,7 @@ namespace SW4
 
             string content = "";
             List<string> result = new List<string>();
-            result.Add("# Linear Time: " + mapLinearTime[mapNumber - 1]);
+            //result.Add("# Linear Time: " + mapLinearTime[mapNumber - 1]);
             result = pyBeginningList;
             content = "obstacleList = " + polygonContent;
             result.Add(content);
@@ -558,9 +558,9 @@ namespace SW4
             result.Add("starttime = datetime.datetime.now()");
             content = "";
             int z = 1;
-            foreach (List<string> path in mapPaths[mapNumber - 1])
+            foreach (List<string> path in mapPaths[0])
             {
-                result.Add("print \"Path " + z++ + " of " + mapPaths[mapNumber - 1].Count + "\"");
+                result.Add("print \"Path " + z++ + " of " + mapPaths[0].Count + "\"");
                 result.Add("path = []");
                 for (int y = 0; y < path.Count - 1; y++)
                 {
@@ -672,9 +672,9 @@ namespace SW4
             MainClass test = new MainClass();
             //test.createMaps();
             //Console.WriteLine("Generating Map");
-            for (int x = 1; x <= 30; x++)
+            for (int x = 1; x <= 1; x++)
             {
-                test.smoPyBreak(x);
+                test.smoPyBreak(26);
             }
             //Console.WriteLine(MyRound(-2.4343423424));
             //Console.ReadLine();
