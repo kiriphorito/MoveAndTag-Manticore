@@ -425,7 +425,7 @@ namespace SW4
 
         public void pathGenerator_GreedyPassiveTime()
         {
-            for (int x = 25; x < 26; x++)
+            for (int x = 29; x < 30; x++)
             {
                 Console.WriteLine("         Map: " + (x + 1));
 
@@ -676,7 +676,7 @@ namespace SW4
             //Console.WriteLine("Generating Map");
             for (int x = 1; x <= 1; x++)
             {
-                test.smoPyBreak(26);
+                test.smoPyBreak(29);
             }
             //Console.WriteLine(MyRound(-2.4343423424));
             //Console.ReadLine();
