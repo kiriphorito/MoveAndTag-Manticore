@@ -580,8 +580,8 @@ namespace SW4
                 result.Add("pathStr = pathStr.replace(\"[\", \"(\")");
                 result.Add("pathStr = pathStr.replace(\"]\", \")\")");
                 result.Add("f = open('smo2sol-" + mapNumber + ".txt', 'a+')");
-                result.Add("f.write(content)");
-                result.Add("f.close\n");
+                result.Add("f.write(pathStr)");
+                result.Add("f.close");
                 result.Add("content += pathStr");
             }
             //result.Add("endtime = datetime.datetime.now()");
@@ -674,7 +674,7 @@ namespace SW4
             //Console.WriteLine("Generating Map");
             for (int x = 1; x <= 30; x++)
             {
-                test.smoPy(x);
+                test.smoPyBreak(x);
             }
             //Console.WriteLine(MyRound(-2.4343423424));
             //Console.ReadLine();
