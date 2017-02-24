@@ -64,7 +64,10 @@ def samLines(coords):
 
 
 plt.axes()
-solutionFileName = 'smo2sol-' + sys.argv[1] + '.txt'
+if 'all' in sys.argv[2]:
+    solutionFileName = 'smo2sol-' + sys.argv[1] + '.txt'
+else:
+    solutionFileName = 'smo2sol-' + sys.argv[1] + '-path-' + sys.argv[2] + '.txt'
 with open(solutionFileName,'r') as input:
     for line in input:
         if 'Time Taken:' in line:
@@ -108,7 +111,11 @@ drawRobots(robotpoints)
 
 polygonpoints = list(literal_eval(polygons[0]))
 print polygonpoints
-drawPolygons(polygonpoints)
+
+if 'nofill' == sys.argv[3]:
+    drawPolygonsNoFill(polygonpoints)
+else:
+    drawPolygons(polygonpoints)
 
 plt.axis('scaled')
 plt.show()

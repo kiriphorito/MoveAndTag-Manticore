@@ -2,12 +2,13 @@
 # coding: UTF-8
 import matplotlib.pyplot as plt
 from ast import literal_eval
+import numpy
 import sys
 import ast
 
 
 def drawPolygon(points):
-    polygon = plt.Polygon(points)
+    polygon = plt.Polygon(points,color='black')
     plt.gca().add_patch(polygon)
 
 def drawPolygons(polygons):
@@ -37,7 +38,7 @@ def drawPolygonNoFill(points,color):
 def drawPolygonsNoFill(polygons):
     try:
         for xs in polygons:
-            drawPolygonNoFill(xs,'red')
+            drawPolygonNoFill(xs,'black')
     except ValueError:
         print ("no polygons specified")
 
@@ -47,13 +48,14 @@ def samLines(coords):
         print lines
         prex = "f"
         prey = "f"
+        randColor = numpy.random.rand(3,1)
         for (x,y) in lines:
             print (x,y)
             if prex == "f":
                 prex = x
                 prey = y
             else:
-                line = plt.Polygon([(prex,prey),(x,y)], closed=None, fill=None)
+                line = plt.Polygon([(prex,prey),(x,y)], closed=None, fill=None,edgecolor=randColor)
                 plt.gca().add_patch(line)
                 prex = x
                 prey = y
@@ -62,8 +64,10 @@ def samLines(coords):
 
 
 plt.axes()
-
-solutionFileName = 'smo2sol-' + sys.argv[1] + '.txt'
+if 'all' in sys.argv[2]:
+    solutionFileName = 'smo2sol-' + sys.argv[1] + '.txt'
+else:
+    solutionFileName = 'smo2sol-' + sys.argv[1] + '-path-' + sys.argv[2] + '.txt'
 with open(solutionFileName,'r') as input:
     for line in input:
         if 'Time Taken:' in line:
@@ -107,7 +111,11 @@ drawRobots(robotpoints)
 
 polygonpoints = list(literal_eval(polygons[0]))
 print polygonpoints
-drawPolygonsNoFill(polygonpoints)
+
+if 'nofill' == sys.argv[3]:
+    drawPolygonsNoFill(polygonpoints)
+else:
+    drawPolygons(polygonpoints)
 
 plt.axis('scaled')
 plt.show()
